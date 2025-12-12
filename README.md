@@ -6,6 +6,8 @@ The application itself is composed of a backend written with Fast-API/Python, an
 
 ![Local structure of the application](Images/devops-project-local.svg)
 
+![CI/CD and dockerization](Images/CI-dockerization.svg)
+
 Regarding the deployment, a we used Terraform to deploy a kubernetes cluster. The yaml files of the kuberenetes cluster specify the lastet version fo the frontend and backend containers, so a simple rollout is needed to update the changes done to the source code of the API anf the frontend.
 
 ![](Images/qr-code-part2.png)
