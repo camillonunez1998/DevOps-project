@@ -1,0 +1,34 @@
+name: Build and Publish image to Docker Hub
+on:
+  push:
+    branches:
+      - main
+    #These lines help only to make a push when the source code for the bakcend of front end has changed
+    paths-ignore:
+      # --- API EXCLUSIONS (Python specific) ---
+      - 'api/**/__pycache__/**'  # Ignore Python compiled cache files
+      - 'api/.venv/**'           # Ignore the Python virtual environment directory
+      - 'api/.env'               # Ignore environment variable files
+      
+      # --- FRONT-END EXCLUSIONS (Next.js specific) ---
+      - 'front-end-nextjs/.next/**'     # Ignore Next.js build output directory
+      - 'front-end-nextjs/node_modules/**' # Ignore generated dependencies
+      
+      # --- GENERAL EXCLUSIONS ---
+      - '**/*.md'                # Ignore README or markdown files
+      - '**/.gitignore'          # Ignore git configuration files
+jobs:
+  publish_images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build image
+        run: |
+          docker build . /api/ -t camilo192/devops-project-frontend:latest
+          docker build . /front-end-nextjs/ -t camilo192/devops-project-backend:latest
+      - name: push image to docker hub
+        run: |
+          docker login -u camilo192 -p ${{ secrets.DOCKER_HUB_TOKEN }}
+          docker push camilo192/devops-project-frontend:latest
+          docker push camilo192/devops-project-backtend:latest
