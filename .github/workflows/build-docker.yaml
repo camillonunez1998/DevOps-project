@@ -16,8 +16,8 @@ jobs:
         uses: actions/checkout@v4
       - name: build image
         run: |
-          docker build . /api/ -t camilo192/devops-project-frontend:latest
-          docker build . /front-end-nextjs/ -t camilo192/devops-project-backend:latest
+          docker build ./api/ -t camilo192/devops-project-frontend:latest
+          docker build ./front-end-nextjs/ -t camilo192/devops-project-backend:latest
       - name: push image to docker hub
         run: |
           docker login -u camilo192 -p ${{ secrets.DOCKER_HUB_TOKEN }}
