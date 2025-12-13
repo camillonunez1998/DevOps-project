@@ -1,4 +1,4 @@
-#Importing necessary libraries and modules
+#Importing necessary libraries
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import qrcode
