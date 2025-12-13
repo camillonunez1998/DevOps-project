@@ -22,4 +22,4 @@ jobs:
         run: |
           docker login -u camilo192 -p ${{ secrets.DOCKER_HUB_TOKEN }}
           docker push camilo192/devops-project-frontend:latest
-          docker push camilo192/devops-project-backtend:latest
+          docker push camilo192/devops-project-backend:latest
