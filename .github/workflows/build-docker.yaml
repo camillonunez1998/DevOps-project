@@ -4,19 +4,10 @@ on:
     branches:
       - main
     #These lines help only to make a push when the source code for the bakcend of front end has changed
-    paths-ignore:
-      # --- API EXCLUSIONS (Python specific) ---
-      - 'api/**/__pycache__/**'  # Ignore Python compiled cache files
-      - 'api/.venv/**'           # Ignore the Python virtual environment directory
-      - 'api/.env'               # Ignore environment variable files
-      
-      # --- FRONT-END EXCLUSIONS (Next.js specific) ---
-      - 'front-end-nextjs/.next/**'     # Ignore Next.js build output directory
-      - 'front-end-nextjs/node_modules/**' # Ignore generated dependencies
-      
-      # --- GENERAL EXCLUSIONS ---
-      - '**/*.md'                # Ignore README or markdown files
-      - '**/.gitignore'          # Ignore git configuration files
+    paths:
+      # Explicitly watch all source files in the main application directories
+      - 'api/**'
+      - 'front-end-nextjs/**'
 jobs:
   publish_images:
     runs-on: ubuntu-latest
