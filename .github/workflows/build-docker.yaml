@@ -4,10 +4,10 @@ on:
     branches:
       - main
     #These lines help only to make a push when the source code for the bakcend of front end has changed
-    paths:
-      # Explicitly watch all source files in the main application directories
-      - 'api/main.py'
-      - 'front-end-nextjs/**'
+    # paths:
+    #   # Explicitly watch all source files in the main application directories
+    #   - 'api/main.py'
+    #   - 'front-end-nextjs/**'
 jobs:
   publish_images:
     runs-on: ubuntu-latest
