@@ -21,7 +21,7 @@ spec:
 ---
 apiVersion: v1
 kind: Service
-metadata:
+metadata: 
   name: qr-frontend-service
 spec:
   type: LoadBalancer
