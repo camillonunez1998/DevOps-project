@@ -2,7 +2,7 @@ services:
   devops-project-backend:
     build: ./api
     ports:
-      - "80:8000"
+      - "8000:8000"
   devops-project-frontend:
     build: ./front-end-nextjs
     ports:
