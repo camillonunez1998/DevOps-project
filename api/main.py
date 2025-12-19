@@ -13,13 +13,12 @@ load_dotenv()
 app = FastAPI()
 
 # Allowing CORS for local testing
-origins = [
-    "http://localhost:3000"
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
