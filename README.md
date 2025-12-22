@@ -45,7 +45,7 @@ Once these steps are completed, the frontend will be active on port 80. To acces
 
 ## Authentication & Security
 
-AWS credentials are required by both Terraform and the backend application. Terraform utilizes the credentials stored in ~/.aws/credentials on your local machine to provision the infrastructure. The backend requires these credentials to be defined as environment variables in ./api/.env to access the S3 bucket. In accordance with security best practices, both sets of credentials follow the Principle of Least Privilege (PoLP)."
+AWS credentials are required by both Terraform and the backend application. Terraform utilizes the credentials stored in ~/.aws/credentials on your local machine to provision the infrastructure. The backend requires these credentials to be defined as environment variables in ./api/.env to access the S3 bucket. In accordance with security best practices, both sets of credentials follow the Principle of Least Privilege (PoLP).
 
 
 
