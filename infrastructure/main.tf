@@ -107,32 +107,30 @@ resource "aws_instance" "docker_server" {
   timeouts {
     create = "5m"
   }
+  user_data = <<-EOF
+                #!/bin/bash
+                # Update system packages
+                sudo yum update -y
 
-#   # 3. The Startup Script (User Data)
-#   user_data = <<-EOF
-#               #!/bin/bash
-#               # Install Docker
-#               yum update -y
-#               yum install -y docker
-#               systemctl start docker
-#               systemctl enable docker
-              
-#               # Install Docker Compose
-#               curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-#               chmod +x /usr/local/bin/docker-compose
+                # Install Docker via Amazon Linux Extras
+                sudo amazon-linux-extras install docker -y
+                
+                # Start and enable Docker service
+                sudo systemctl start docker
+                sudo systemctl enable docker
 
-#               # Create a directory for your app
-#               mkdir -p /home/ec2-user/app
-              
-#               # Create the docker-compose file on the fly
-#               cat <<EOT > /home/ec2-user/app/docker-compose.yml
-#               ${file("${path.module}/docker-compose.yml")}
-#               EOT
+                # Grant ec2-user permissions to run Docker commands
+                sudo usermod -aG docker ec2-user
 
-#               # Run the app
-#               cd /home/ec2-user/app
-#               /usr/local/bin/docker-compose up -d
-#               EOF
+                # Install Docker Compose V2 for ARM64 (aarch64)
+                # Create directory for CLI plugins
+                sudo mkdir -p /usr/local/lib/docker/cli-plugins/
+                
+                # Download the ARM64 (aarch64) specific binary
+                sudo curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-aarch64 -o /usr/local/lib/docker/cli-plugins/docker-compose
+                
+                # Make the binary executable
+                sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+                EOF
 
-#   tags = { Name = "Docker-Compose-Server" }
  }

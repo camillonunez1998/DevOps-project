@@ -1,16 +1,56 @@
 # Project
 
-The objective of this project is to build the cloud infrustructure proposed by @rishabkumar7 in [devops-qr-code](https://github.com/rishabkumar7/devops-qr-code) for an application that generates a QR code when a URL is given.
+The objective of this project is to design and develop a minimal set up required for the continous integration and continous deployment (CI/CD) of a web application. 
 
-The application itself is composed of a backend written with Fast-API/Python, and a frontend with nextJS. these two components are contenerized with Docker, and pushed to DockerHub on every push through the use of Github Actions as depicted in the image below.
+The app —sourced from @rishabkumar7 in [devops-qr-code](https://github.com/rishabkumar7/devops-qr-code)— consists on a Next.js frontend that receives a URL, and a Python/FastAPI backend that returns a QR code.
+
+## Running the application locally
+
+The diagram below depicts the interaction of the different components of the application. 
 
 ![Local structure of the application](Images/devops-project-local.svg)
 
+To run it locally without docker, please reffer to the instructions in [devops-qr-code](https://github.com/rishabkumar7/devops-qr-code) repository.
+
+**Note:** Before starting the application locally, you must update the API endpoint to the local development environment. This configuration is located in `front-end-nextjs/src/app/page.js`, specifically within the lines highlighted below:
+
+![API endpoint](Images/API-endpoint.png)
+
+### Dockerization
+
+Both the backend and frontend have been containerized using Docker. A GitHub Actions workflow was implemented to automate the build and push process to DockerHub. This pipeline triggers on every push to the master branch, ensuring that the latest images are always available, as illustrated in the diagram below.
+
 ![CI/CD and dockerization](Images/CI-dockerization.svg)
 
-Regarding the deployment, a we used Terraform to deploy a kubernetes cluster. The yaml files of the kuberenetes cluster specify the lastet version fo the frontend and backend containers, so a simple rollout is needed to update the changes done to the source code of the API anf the frontend.
+To run the application locally with docker, run the command `docker compose up`.
 
-![](Images/qr-code-part2.png)
+## Deployment in cloud
+
+The application is hosted on AWS, with the infrastructure fully defined via Terraform. The following diagram depicts the cloud resources and network configuration used to expose the application to the internet:
+
+![Terraform](Images/terraform.svg)
+
+To provision the cloud infrastructure, navigate to the `./infrastructure/` directory and execute the following commands:
+
+- `terraform init`
+- `terraform apply`
+
+Once you have done this your AWS VPC will be ready to host the application. In order to do so, follow the steps:
+- Connect through EC2 Instance Connect to the EC2 instance.
+- Pull the lastest docker images of the frontend and backend in the home directory.
+- Copy the `compose.yaml` file located in this repository in the instance's home directory.
+- Execute `docker-compose up`.
+
+Once these steps are completed, the frontend will be active on port 80. To access the application, simply navigate to the EC2 instance's public IP address in your web browser.
+
+## Authentication & Security
+
+AWS credentials are required by both Terraform and the backend application. Terraform utilizes the credentials stored in ~/.aws/credentials on your local machine to provision the infrastructure. The backend requires these credentials to be defined as environment variables in ./api/.env to access the S3 bucket. In accordance with security best practices, both sets of credentials follow the Principle of Least Privilege (PoLP)."
+
+
+
+
+
 
 ## Author
 

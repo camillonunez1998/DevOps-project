@@ -10,9 +10,9 @@ export default function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      //For local debug
+      //For local deployment
       //const response = await axios.post(`http://localhost:8000/generate-qr/?url=${url}`);
-      //For deployment
+      //For cloud deployment
       const response = await axios.post(`http://13.53.206.45:8000/generate-qr/?url=${url}`);
       setQrCodeUrl(response.data.qr_code_url);
     } catch (error) {
