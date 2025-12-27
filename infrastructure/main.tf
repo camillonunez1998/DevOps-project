@@ -93,8 +93,12 @@ resource "aws_security_group" "docker_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
 
-
+# This resource registers mi SSH public key in AWS
+resource "aws_key_pair" "deployer_key" {
+  key_name   = "ssh-key-devops-project"
+  public_key = file("~/.ssh/id_rsa_aws.pub") # Route to my public key
 }
 
 # 2. The EC2 Instance
@@ -103,6 +107,7 @@ resource "aws_instance" "docker_server" {
   instance_type = "t4g.medium"
   subnet_id     = aws_subnet.subnet_1.id
   vpc_security_group_ids = [aws_security_group.docker_sg.id]
+  key_name = aws_key_pair.deployer_key.key_name
 
   timeouts {
     create = "5m"

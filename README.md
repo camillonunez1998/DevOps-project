@@ -36,6 +36,8 @@ Both the backend and frontend have been containerized using Docker. A GitHub Act
 
 To run the application locally with docker, run the command `docker compose up`.
 
+**Note:** Since the `compose.yaml` file is located in the project's root (`./`), there must be a `.env` file containing the AWS credentials for the API also in the project's root, following the structure of `./api/.env.example`.
+
 
 ## Deployment in cloud
 
@@ -55,9 +57,10 @@ To provision the cloud infrastructure, navigate to the `./infrastructure/` direc
 
 Once you have done this your AWS VPC will be ready to host the application. In order to do so, follow the steps:
 - Connect through EC2 Instance Connect to the EC2 instance.
-- Pull the latest docker images of the frontend and backend in the home directory.
+- Update the API endpoint in `front-end-nextjs/src/app/page.js`, so that the IP matches the public IP of the EC2 instance.
+- Build and push to DockerHub a new image of the API.
 - Copy the `compose.yaml` file located in this repository in the instance's home directory.
-- Execute `docker-compose up`.
+- Execute `docker compose up -d`.
 
 
 Once these steps are completed, the frontend will be active on port 80. To access the application, simply navigate to the EC2 instance's public IP address in your web browser.
@@ -66,7 +69,7 @@ Once these steps are completed, the frontend will be active on port 80. To acces
 ## Authentication & Security
 
 
-AWS credentials are required by both Terraform and the backend application. Terraform utilizes the credentials stored in ~/.aws/credentials on your local machine to provision the infrastructure. The backend requires these credentials to be defined as environment variables in ./api/.env to access the S3 bucket. In accordance with security best practices, both sets of credentials follow the Principle of Least Privilege (PoLP).
+AWS credentials are required by Terraform and the backend. Terraform utilizes the credentials stored in `~/.aws/credentials` on your local machine to provision the AWS cloud infrastructure. On the other hand, the backend requires credentials to be defined as environment variables in `./api/.env` to access the S3 bucket. In accordance with security best practices, two different users were defined for each one of these needs with both sets of credentials following the Principle of Least Privilege (PoLP).
 
 
 
