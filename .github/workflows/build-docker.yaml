@@ -4,13 +4,13 @@ on:
     branches:
       - master
     #These lines help only to make a push when the source code for the bakcend of front end has changed
-    # paths:
-    #   # Explicitly watch all source files in the main application directories
-    #   - 'api/**'
-    #   - 'front-end-nextjs/**'
+    paths:
+      # Explicitly watch all source files in the main application directories
+      - 'api/**'
+      - 'front-end-nextjs/**'
 jobs:
   publish_images:
-    runs-on: ubuntu-24.04-arm64
+    runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v4
