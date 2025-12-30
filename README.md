@@ -59,7 +59,7 @@ Once you have done this your AWS VPC will be ready to host the application. In o
 - Connect through EC2 Instance Connect to the EC2 instance.
 - Update the API endpoint in `front-end-nextjs/src/app/page.js`, so that the IP matches the public IP of the EC2 instance.
 - Build and push to DockerHub a new image of the API.
-- Copy the `compose.yaml` file located in this repository in the instance's home directory.
+- The `compose.yaml` file is located in the instance's home directory. You must uncomment the environment variables within the file to proceed.
 - Execute `docker compose up -d`.
 
 
@@ -69,7 +69,15 @@ Once these steps are completed, the frontend will be active on port 80. To acces
 ## Authentication & Security
 
 
-AWS credentials are required by Terraform and the backend. Terraform utilizes the credentials stored in `~/.aws/credentials` on your local machine to provision the AWS cloud infrastructure. On the other hand, the backend requires credentials to be defined as environment variables in `./api/.env` to access the S3 bucket. In accordance with security best practices, two different users were defined for each one of these needs with both sets of credentials following the Principle of Least Privilege (PoLP).
+AWS credentials are required by Terraform and the backend. Terraform utilizes the credentials stored in `~/.aws/credentials` on your local machine to provision the AWS cloud infrastructure. This file is expected to be in the format:
+
+`[default]`<br>
+`aws_access_key_id = *****************`<br>
+`aws_secret_access_key = ******************`
+
+ On the other hand, the backend requires credentials to be defined as environment variables in `./api/.env` to access the S3 bucket. In accordance with security best practices, two different users were defined for each one of these needs with both sets of credentials following the Principle of Least Privilege (PoLP).
+
+Furthermore, Terraform will look for an SSH key pair in `~/.ssh/` named `id_rsa_aws`. These keys are required for the SSH tunnel used to communicate securely with the EC2 instance.
 
 
 

@@ -5,8 +5,8 @@ services:
       - "8000:8000"
     # Aquí mapeas las variables del sistema/archivo .env al contenedor
     environment:
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_KEY}
+      - AWS_ACCESS_KEY_ID=$${AWS_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=$${AWS_SECRET_KEY}
   
   frontend:
     image: camilo192/devops-project-frontend:latest

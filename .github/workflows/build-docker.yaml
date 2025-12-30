@@ -1,4 +1,5 @@
-name: Build and Publish image to Docker Hub
+name: Build and Push Docker Images
+
 on:
   push:
     branches:
@@ -8,18 +9,39 @@ on:
       # Explicitly watch all source files in the main application directories
       - 'api/**'
       - 'front-end-nextjs/**'
+
 jobs:
-  publish_images:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout code
         uses: actions/checkout@v4
-      - name: build image
-        run: |
-          docker build ./api/ -t camilo192/devops-project-frontend:latest
-          docker build ./front-end-nextjs/ -t camilo192/devops-project-backend:latest
-      - name: push image to docker hub
+
+      # Install QEMU static binaries for multi-arch emulation
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # Set up Docker Buildx to enable multi-platform builds
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to DockerHub
         run: |
           docker login -u camilo192 -p ${{ secrets.DOCKER_HUB_TOKEN }}
-          docker push camilo192/devops-project-frontend:latest
-          docker push camilo192/devops-project-backend:latest
+
+      - name: Build and push Backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          # Push directly to DockerHub without loading into local Docker daemon
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: camilo192/backend:latest
+
+      - name: Build and push Frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: camilo192/frontend:latest

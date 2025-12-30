@@ -112,30 +112,8 @@ resource "aws_instance" "docker_server" {
   timeouts {
     create = "5m"
   }
-  user_data = <<-EOF
-                #!/bin/bash
-                # Update system packages
-                sudo yum update -y
-
-                # Install Docker via Amazon Linux Extras
-                sudo amazon-linux-extras install docker -y
-                
-                # Start and enable Docker service
-                sudo systemctl start docker
-                sudo systemctl enable docker
-
-                # Grant ec2-user permissions to run Docker commands
-                sudo usermod -aG docker ec2-user
-
-                # Install Docker Compose V2 for ARM64 (aarch64)
-                # Create directory for CLI plugins
-                sudo mkdir -p /usr/local/lib/docker/cli-plugins/
-                
-                # Download the ARM64 (aarch64) specific binary
-                sudo curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-aarch64 -o /usr/local/lib/docker/cli-plugins/docker-compose
-                
-                # Make the binary executable
-                sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
-                EOF
-
+  #Installation of docker, docker compose plugin, and passing the content of the compose.yaml file
+  user_data = templatefile("install_docker.sh", {
+    compose_content = file("${path.module}/../compose.yaml")
+  })
  }
