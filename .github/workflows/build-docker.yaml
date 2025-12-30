@@ -32,16 +32,16 @@ jobs:
       - name: Build and push Backend
         uses: docker/build-push-action@v5
         with:
-          context: ./backend
+          context: ./api
           # Push directly to DockerHub without loading into local Docker daemon
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: camilo192/backend:latest
+          tags: camilo192/devops-project-api:latest
 
       - name: Build and push Frontend
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
+          context: ./front-end-nextjs
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: camilo192/frontend:latest
+          tags: camilo192/devops-project-frontend:latest
