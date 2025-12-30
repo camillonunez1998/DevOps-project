@@ -6,9 +6,9 @@ on:
       - master
     #These lines help only to make a push when the source code for the bakcend of front end has changed
     paths:
-      # Explicitly watch all source files in the main application directories
-      - 'api/**'
-      - 'front-end-nextjs/**'
+      # # Explicitly watch all source files in the main application directories
+      # - 'api/**'
+      # - 'front-end-nextjs/**'
 
 jobs:
   build:
