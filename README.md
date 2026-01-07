@@ -56,10 +56,10 @@ To provision the cloud infrastructure, navigate to the `./infrastructure/` direc
 
 
 Once you have done this your AWS VPC will be ready to host the application. In order to do so, follow the steps:
-- Connect through EC2 Instance Connect to the EC2 instance.
 - Update the API endpoint in `front-end-nextjs/src/app/page.js`, so that the IP matches the public IP of the EC2 instance.
-- Build and push to DockerHub a new image of the API.
-- The `compose.yaml` file is located in the instance's home directory. You must uncomment the environment variables within the file to proceed.
+- Push the changes with git. GitHub Actions will build and push to DockerHub the new image of the frontend.
+- Connect to the EC2 instance with Instance Connect or through ssh with the command `ssh -i ~/.ssh/id_rsa_aws ec2-user@<public-IP>`
+- The `compose.yaml` file is located in the instance's home directory. You must uncomment the environment variables within the file to proceed. You'll need sudo to make changes in this file.
 - Execute `docker compose up -d`.
 
 
