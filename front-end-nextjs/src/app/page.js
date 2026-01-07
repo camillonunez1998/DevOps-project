@@ -13,7 +13,7 @@ export default function Home() {
       //For local deployment
       //const response = await axios.post(`http://localhost:8000/generate-qr/?url=${url}`);
       //For cloud deployment
-      const response = await axios.post(`http://16.16.70.172:8000/generate-qr/?url=${url}`);
+      const response = await axios.post(`http://16.170.209.76:8000/generate-qr/?url=${url}`);
       setQrCodeUrl(response.data.qr_code_url);
     } catch (error) {
       console.error('Error generating QR Code:', error);
