@@ -103,8 +103,10 @@ resource "aws_key_pair" "deployer_key" {
 
 # 2. The EC2 Instance
 resource "aws_instance" "docker_server" {
-  ami           = "ami-040750a206b9f6c65" # Amazon Linux 2023 in eu-north-1
-  instance_type = "t4g.medium"
+  ami           = "ami-0ea2ed4258c13b100" # Amazon Linux 2023 in eu-north-1
+  #t4g.medium is for architecture arm64
+  #instance_type = "t4g.medium"
+  instance_type = "t3.medium"
   subnet_id     = aws_subnet.subnet_1.id
   vpc_security_group_ids = [aws_security_group.docker_sg.id]
   key_name = aws_key_pair.deployer_key.key_name
