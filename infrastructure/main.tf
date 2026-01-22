@@ -64,6 +64,15 @@ module "eks" {
   cluster_name    = "devops-project"
   cluster_version = "1.30"
 
+  # This grants the IAM principal creating the cluster 
+  # administrator permissions within the Kubernetes cluster. Without this, 
+  # AWS IAM "Full Access" is not enough to run kubectl commands.
+  enable_cluster_creator_admin_permissions = true
+
+  # This enables the EKS Access Entry API, which is the modern way to manage 
+  # cluster permissions without manually editing the aws-auth ConfigMap.
+  authentication_mode = "API_AND_CONFIG_MAP"
+
   cluster_endpoint_public_access = true
 
   vpc_id                   = aws_vpc.main.id

@@ -1,0 +1,8 @@
+secretGenerator:
+- name: aws-bucket-credentials
+  envs:
+    - .env
+
+resources:
+  - frontend.yaml
+  - backend.yaml

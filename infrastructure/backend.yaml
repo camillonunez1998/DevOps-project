@@ -14,9 +14,12 @@ spec:
     spec:
       containers:
       - name: qr-api
-        image: rishabkumar7/devops-qr-code-backend:latest
+        image: camilo192/devops-project-api:latest
         ports:
         - containerPort: 80
+        envFrom:
+          - secretRef:
+              name: aws-bucket-credentials
 
 ---
 apiVersion: v1
