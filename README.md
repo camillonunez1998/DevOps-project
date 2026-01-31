@@ -28,7 +28,7 @@ To run it locally without docker, please refer to the instructions in [devops-qr
 ### Dockerization
 
 
-Both the backend and frontend have been containerized using Docker. A GitHub Actions workflow was implemented to automate the build and push process to DockerHub. This pipeline triggers on every push to the master branch, ensuring that the latest images are always available, as illustrated in the diagram below.
+Both the backend and frontend have been containerized using Docker. A GitHub Actions workflow was implemented to automate the build and push process to DockerHub. This pipeline triggers on every push to the master branch, ensuring that the latest images are always available, as illustrated in the diagram below. The build and push is triggered only in the components with changes registered in git.
 
 
 ![CI/CD and dockerization](Images/CI-dockerization.svg)
