@@ -1,4 +1,3 @@
-#Test comment
 #Importing necessary libraries and modules
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -30,7 +29,7 @@ s3 = boto3.client(
     aws_access_key_id= os.getenv("AWS_ACCESS_KEY"),
     aws_secret_access_key= os.getenv("AWS_SECRET_KEY"))
 
-bucket_name = 'qrcode-camilo-bucket-poc' # Add your bucket name here
+bucket_name = 'qr-code-bucket-camilo' # Add your bucket name here
 
 @app.post("/generate-qr/")
 async def generate_qr(url: str):
