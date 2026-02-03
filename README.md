@@ -75,7 +75,175 @@ AWS credentials are required by Terraform and the backend. Terraform utilizes th
 `aws_access_key_id = *****************`<br>
 `aws_secret_access_key = ******************`
 
- On the other hand, the backend requires credentials to be defined as environment variables in `./api/.env` to access the S3 bucket. In accordance with security best practices, two different users were defined for each one of these needs with both sets of credentials following the Principle of Least Privilege (PoLP).
+And the minimal permissions required .json file is:
+
+`{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "S3Management",
+			"Effect": "Allow",
+			"Action": [
+				"s3:CreateBucket",
+				"s3:DeleteBucket",
+				"s3:Get*",
+				"s3:ListBucket",
+				"s3:PutBucketPolicy",
+				"s3:DeleteBucketPolicy",
+				"s3:PutBucketPublicAccessBlock",
+				"s3:PutBucketOwnershipControls",
+				"s3:PutBucketAcl",
+				"s3:PutLifecycleConfiguration",
+				"s3:PutObject"
+			],
+			"Resource": [
+				"arn:aws:s3:::qr-code-bucket-camilo",
+				"arn:aws:s3:::qr-code-bucket-camilo/*"
+			]
+		},
+		{
+			"Sid": "IAMAndOIDCManagement",
+			"Effect": "Allow",
+			"Action": [
+				"iam:CreateRole",
+				"iam:DeleteRole",
+				"iam:GetRole",
+				"iam:List*",
+				"iam:PassRole",
+				"iam:TagRole",
+				"iam:UntagRole",
+				"iam:PutRolePolicy",
+				"iam:AttachRolePolicy",
+				"iam:DetachRolePolicy",
+				"iam:DeleteRolePolicy",
+				"iam:GetRolePolicy",
+				"iam:CreateInstanceProfile",
+				"iam:DeleteInstanceProfile",
+				"iam:GetInstanceProfile",
+				"iam:AddRoleToInstanceProfile",
+				"iam:RemoveRoleFromInstanceProfile",
+				"iam:CreatePolicy",
+				"iam:DeletePolicy",
+				"iam:GetPolicy",
+				"iam:GetPolicyVersion",
+				"iam:TagPolicy",
+				"iam:CreateOpenIDConnectProvider",
+				"iam:GetOpenIDConnectProvider",
+				"iam:DeleteOpenIDConnectProvider",
+				"iam:TagOpenIDConnectProvider"
+			],
+			"Resource": [
+				"arn:aws:iam::973076296292:role/devops-project*",
+				"arn:aws:iam::973076296292:role/green-*",
+				"arn:aws:iam::973076296292:role/eks-*",
+				"arn:aws:iam::973076296292:role/aws-service-role/*",
+				"arn:aws:iam::973076296292:policy/devops-project*",
+				"arn:aws:iam::973076296292:instance-profile/devops-project*",
+				"arn:aws:iam::973076296292:instance-profile/green-*",
+				"arn:aws:iam::973076296292:oidc-provider/*",
+				"arn:aws:iam::aws:policy/*"
+			]
+		},
+		{
+			"Sid": "KMSLogsSSMAndAutoscaling",
+			"Effect": "Allow",
+			"Action": [
+				"kms:CreateKey",
+				"kms:DescribeKey",
+				"kms:GetKeyPolicy",
+				"kms:GetKeyRotationStatus",
+				"kms:ListResourceTags",
+				"kms:ScheduleKeyDeletion",
+				"kms:TagResource",
+				"kms:EnableKeyRotation",
+				"kms:CreateAlias",
+				"kms:DeleteAlias",
+				"kms:ListAliases",
+				"logs:CreateLogGroup",
+				"logs:DescribeLogGroups",
+				"logs:ListTagsForResource",
+				"logs:TagResource",
+				"logs:PutRetentionPolicy",
+				"logs:DeleteLogGroup",
+				"ssm:GetParameter",
+				"ssm:GetParameters",
+				"autoscaling:Describe*",
+				"autoscaling:TerminateInstanceInAutoScalingGroup",
+				"autoscaling:UpdateAutoScalingGroup"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "EC2InfrastructureAndLaunchTemplates",
+			"Effect": "Allow",
+			"Action": [
+				"ec2:CreateVpc",
+				"ec2:DeleteVpc",
+				"ec2:Describe*",
+				"ec2:CreateSubnet",
+				"ec2:DeleteSubnet",
+				"ec2:CreateInternetGateway",
+				"ec2:DeleteInternetGateway",
+				"ec2:AttachInternetGateway",
+				"ec2:DetachInternetGateway",
+				"ec2:CreateRouteTable",
+				"ec2:DeleteRouteTable",
+				"ec2:CreateRoute",
+				"ec2:DeleteRoute",
+				"ec2:AssociateRouteTable",
+				"ec2:DisassociateRouteTable",
+				"ec2:ModifyVpcAttribute",
+				"ec2:ModifySubnetAttribute",
+				"ec2:CreateSecurityGroup",
+				"ec2:DeleteSecurityGroup",
+				"ec2:AuthorizeSecurityGroupIngress",
+				"ec2:AuthorizeSecurityGroupEgress",
+				"ec2:RevokeSecurityGroupIngress",
+				"ec2:RevokeSecurityGroupEgress",
+				"ec2:CreateTags",
+				"ec2:RunInstances",
+				"ec2:TerminateInstances",
+				"ec2:CreateLaunchTemplate",
+				"ec2:DeleteLaunchTemplate",
+				"ec2:CreateLaunchTemplateVersion",
+				"ec2:ModifyLaunchTemplate"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "EKSClusterManagement",
+			"Effect": "Allow",
+			"Action": [
+				"eks:*"
+			],
+			"Resource": "*"
+		}
+	]
+}`
+
+ On the other hand, the backend requires credentials to be defined as environment variables in `./api/.env` to access the S3 bucket. These credentials must be given in the format:
+ 
+ `AWS_ACCESS_KEY=Your-AWS-Access-Key
+AWS_SECRET_KEY=Your-AWS-Secret-Access-Key`
+
+And the minimal permissions required .json file is:
+
+`{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+            ],
+            "Resource": "arn:aws:s3:::qr-code-bucket-camilo/*"
+        }
+    ]
+}`
+
+  In accordance with security best practices, two different users were defined for each one of these needs with both sets of credentials following the Principle of Least Privilege (PoLP).
 
 Furthermore, Terraform will look for an SSH key pair in `~/.ssh/` named `id_rsa_aws`. These keys are required for the SSH tunnel used to communicate securely with the EC2 instance.
 
