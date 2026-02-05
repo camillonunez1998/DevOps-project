@@ -65,6 +65,68 @@ Once you have done this your AWS VPC will be ready to host the application. In o
 
 Once these steps are completed, the frontend will be active on port 80. To access the application, simply navigate to the EC2 instance's public IP address in your web browser.
 
+## Deployment in cloud with EKS
+
+- Within the ./infrastructure directory, add the AWS credentials the API requires to access the S3 bucket in a file called `.env` as specified in the *Authentication & Security* section. 
+
+- To authenticate the certificate of our cluster in AWS, add the endpoint of its API server, and update your local file `~/.kube/config`, run the command
+
+	`aws eks update-kubeconfig --region eu-north-1 --name devops-project`
+
+- Within the infrastructure directory, deploy the application using Kustomize
+
+	`kubectl apply -k .`
+
+- Obtain the IP of the frontend by checking the services in your cluster
+
+	`kubectl get services`
+
+	now you are able to use the app seamlessly.
+
+- To stop the deployment, first destroy the k8s kustomization with 
+
+	`kubectl delete -k .`
+
+	and then the cloud infrastructure with
+
+	`terraform destroy`
+
+	you will need the same pair of keys you used to apply your infrastructure to destroy it, otherwise you'll have to destroy it manually.
+
+
+### Monitoring and Observability
+
+We used the Kube-Prometheus-Stack for the purpose of observability.
+
+- Create a namespace in your cluster
+
+	`kubectl create namespace monitoring`
+
+- Install helm
+
+	`sudo install helm --classic`
+
+- Add the official repo
+
+	`helm repo add prometheus-community https://prometheus-community.github.io/helm-charts`
+	
+	`helm repo update`
+
+- Install the stack
+
+	`helm install my-stack prometheus-community/kube-prometheus-stack --namespace monitoring`
+
+- By default, Grafana installs as a ClusterIP service type (only visible inside the cluster). to see it from your browser, change the service type into Load Balancer
+
+	`kubectl patch svc my-stack-grafana -n monitoring -p '{"spec": {"type": "LoadBalancer"}}'`
+
+- Get the IP of the Load Balancer from the service sin the namespaces. Once you paste it in the browser, you use the username `admin` and obtain the password Helm stored in the cluster with 
+
+	`kubectl get secret --namespace monitoring my-stack-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo`
+
+- Choose the Dashboard ID 12740 (classic for kubernetes).
+
+
 
 ## Authentication & Security
 
