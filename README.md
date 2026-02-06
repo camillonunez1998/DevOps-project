@@ -16,7 +16,14 @@ The diagram below depicts the interaction of the different components of the app
 ![Local structure of the application](Images/devops-project-local.svg)
 
 
-To run it locally without docker, please refer to the instructions in [devops-qr-code](https://github.com/rishabkumar7/devops-qr-code) repository.
+$\color{red}{\text{The frontend is actually executed in the users browser}}$
+
+$\color{red}{\text{There is no need the local machine runs on ubuntu }}$
+
+$\color{red}{\text{There is no need the local machine runs on ubuntu }}$
+
+
+To run it locally without docker, please refer to the instructions in [devops-qr-code](https://github.com/rishabkumar7/devops-qr-code).
 
 
 **Note:** Before starting the application locally, you must update the API endpoint to the local development environment. This configuration is located in `front-end-nextjs/src/app/page.js`, specifically within the lines highlighted below:
@@ -24,19 +31,35 @@ To run it locally without docker, please refer to the instructions in [devops-qr
 
 ![API endpoint](Images/API-endpoint.png)
 
+$\color{red}{\text{Update image with current source code}}$
+
+
 
 ### Dockerization
 
 
-Both the backend and frontend have been containerized using Docker. A GitHub Actions workflow was implemented to automate the build and push process to DockerHub. This pipeline triggers on every push to the master branch, ensuring that the latest images are always available, as illustrated in the diagram below. The build and push is triggered only in the components with changes registered in git.
+Both the backend and frontend have been containerized using Docker. A GitHub Actions workflow was implemented to automate the build and push process to DockerHub. This pipeline triggers on every push to the master branch, ensuring that the latest images are always available, as illustrated in the diagram below.
 
 
 ![CI/CD and dockerization](Images/CI-dockerization.svg)
 
+The build and push is triggered only in the components with changes registered in git. For example in the commit \# 17, only the image of the back end was updated because there were no changes in the frontend. This granularity in the CI pipeline is required since multi-platform image build was implemented to permit local testing in different machines.
 
-To run the application locally with docker, run the command `docker compose up`.
+$\color{red}{\text{Imagen de el workflow del commit 17}}$
 
-**Note:** Since the `compose.yaml` file is located in the project's root (`./`), there must be a `.env` file containing the AWS credentials for the API also in the project's root, following the structure of `./api/.env.example`.
+To run the application with containers you can use any kubernetes distribution. The steps below show how to run it using minikube within the `./local-infrastructure` directory. 
+
+- `minikube start`
+- `kubectl apply -k .`
+- Get the external IP of the Load Balancer with `minikube tunnel`
+- Destroy with `kubectl delete -k .`
+- `minikube stop`
+
+The manifests are exactly the same for on premise and cloud, so we will describe the container orchestration in this section, leaving for the next one only the cloud resources and infrastructures required to deploy the same set up.
+
+**Note:** There must be a `.env` file containing the AWS credentials for the API to acces the S3 bucket in the same directory, following the structure of `./api/.env.example`.
+
+$\color{red}{\text{Descripcion de la arquitectura de orquestracion de contenedores}}$
 
 
 ## Deployment in cloud
